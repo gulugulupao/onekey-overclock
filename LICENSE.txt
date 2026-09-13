@@ -1,0 +1,87 @@
+# =====================================================================
+#  OneKey-OC (一键超频) V1.0.0 — LICENSE（开源授权）
+#  授权采用 MIT License，并附加保护条款与支持范围声明。
+# =====================================================================
+
+MIT License
+
+Copyright (c) 2026 很多问题的小明同学（GitHub @gulugulupao）
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+----------------------------------------------------------------------
+附加保护条款（Additional Protection Terms）
+----------------------------------------------------------------------
+在 MIT License 授权之上，作者进一步声明如下限制；与 MIT License
+存在冲突时，以本节为准：
+
+1. 署名保留：任何复制、修改或再分发本软件（含网页界面、文档、
+   打包产物）时，必须保留本版权声明及作者署名
+   （作者：很多问题的小明同学 / GitHub: gulugulupao），不得删除或更改。
+
+2. 禁止商用：未经作者书面许可，不得将本软件或其修改版本用于
+   商业销售、SaaS 服务、捆绑收费等任何直接或间接营利性用途。
+
+3. 修改后分发约束：对源码进行修改后，允许以学习交流为目的发布
+   修改版，但不得使用原项目名称（onekey-overclock / 一键超频）、
+   原图标及相关标识，以免与原始项目造成混淆。
+
+4. 官方渠道声明：本应用（源码与预编译 fpk 安装包）仅在作者官方
+   渠道发布——GitHub（gulugulupao/onekey-overclock）与微信公众号
+   「很多问题的小明同学」。作者不对第三方转载、整合、修改后的
+   版本提供任何支持。
+
+----------------------------------------------------------------------
+支持范围与免责声明（Support Scope & Disclaimer）
+----------------------------------------------------------------------
+OneKey-OC（一键超频）属于社区提供的额外辅助工具，与飞牛（fnOS）
+官方无关，不属于官方功能，亦非任何硬件厂商的官方产品。
+
+风险提示：本应用会改写系统 `/boot` 与 `/etc/systemd` 等底层配置
+以调整 CPU 频率与电压。超频可能导致系统不稳定、频繁重启、数据
+读写异常，极端情况下存在无法启动（变砖）的风险。安装使用即视为
+已充分知悉上述风险，并自行承担全部后果。
+
+· 作者仅对本仓库（gulugulupao/onekey-overclock）官方发布的最新版本
+  提供社区级支持（GitHub Issues）。
+· 作者不承诺本应用与任何特定系统版本、特定硬件 100% 兼容；
+  不同固件与设备环境可能存在差异，请以实际测试为准。
+· 应用内置「自愈回滚」机制，但该机制不构成任何形式的明示或默示
+  担保，亦不保证在任何异常断电 / 宕机 / 硬件故障下均能恢复。
+· 在系统上安装并使用本应用时，出现的任何性能、稳定性、兼容性及
+  其他问题，均应由用户自行承担；如与您的硬件或系统环境不兼容，
+  请及时卸载并恢复原状。
+· 请勿将本应用用于数据重要性超过其可承受范围的场景；关键数据
+  请始终保留独立备份。
+· 高负载供电场景（如 3 块机械盘同时高速读写或组建 RAID 阵列）
+  可能逼近电源功率上限导致掉压，请降低档位或改用 SSD。
+
+----------------------------------------------------------------------
+第三方组件许可说明
+----------------------------------------------------------------------
+· node 运行时版安装包随 fpk 分发的 aarch64 node 二进制为第三方
+  软件（按各自许可证分发，许可文本见上游），仅供功能调用，版权
+  归其各自所有者；作者不对其提供任何担保。
+· Python 精简版安装包不捆绑任何运行时，仅复用宿主系统 Python3。
+· 本仓库自身源码采用上述 MIT License + 附加保护条款授权。
+· 预编译 fpk 安装包包含本项目全部源码与脚本，遵循同一许可证。
+
+═══════════════════════════════════════════════════════════════
+OneKey-OC (一键超频) V1.0.0 · © 2026 很多问题的小明同学 · GitHub @gulugulupao
+═══════════════════════════════════════════════════════════════
