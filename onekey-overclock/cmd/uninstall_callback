@@ -1,0 +1,50 @@
+#!/bin/bash
+# 卸载回调：安全回退 —— 还原默认 DTB、移除全部 oc 相关 systemd 单元、清根分区脚本与看门狗持久配置，
+# 保证后续开机出厂频率且无残留（oc-reboot/oc-cap 不会被遗留在启动链里）。
+VAR="${TRIM_PKGVAR:-/vol1/@appdata/onekey-overclock}"
+ENVFILE=/boot/fnEnv.txt
+OC_MARK="fdtfile=amlogic/meson-g12b-a311d-oes-oc.dtb"
+DEF_MARK="fdtfile=amlogic/meson-g12b-a311d-oes.dtb"
+
+# 1) 停并移除全部 oc 相关 systemd 单元
+for u in oc-health oc-reboot oc-cap; do
+    systemctl disable "$u.service" 2>/dev/null
+    systemctl stop "$u.service" 2>/dev/null
+    rm -f /etc/systemd/system/$u.service 2>/dev/null
+done
+systemctl daemon-reload 2>/dev/null
+
+# 2) 若当前指向超频 DTB，还原回默认 DTB（原子写防写坏）
+if [ -f "$ENVFILE" ] && grep -q "$OC_MARK" "$ENVFILE"; then
+    cp "$ENVFILE" "/var/run/fnEnv.uninst.$(date +%s).bak" 2>/dev/null
+    sed "s|$OC_MARK|$DEF_MARK|" "$ENVFILE" > "$ENVFILE.$$" 2>/dev/null
+    if [ -s "$ENVFILE.$$" ]; then
+        sync; mv -f "$ENVFILE.$$" "$ENVFILE"; sync; chmod 644 "$ENVFILE" 2>/dev/null
+    else
+        rm -f "$ENVFILE.$$"
+    fi
+    sync
+    echo "[fnEnv reverted to default dtb]"
+fi
+
+# 3) 清超频产物、arm 许可、根分区自愈/上限脚本目录
+rm -f /boot/oc-arm /boot/oc-arm-2.5 2>/dev/null
+rm -f /boot/dtb/amlogic/meson-g12b-a311d-oes-oc.dtb 2>/dev/null
+rm -rf /usr/local/sbin/oc 2>/dev/null
+
+# 4) 清看门狗持久配置（原子清除 RuntimeWatchdogSec，防卸载后开机仍被 systemd 喂狗/复位）
+SYS=/etc/systemd/system.conf
+if grep -q '^RuntimeWatchdogSec=' "$SYS" 2>/dev/null; then
+    sed '/^RuntimeWatchdogSec=.*/d' "$SYS" > "$SYS.$$" 2>/dev/null
+    if [ -s "$SYS.$$" ]; then
+        sync; mv -f "$SYS.$$" "$SYS"; sync
+    else
+        rm -f "$SYS.$$"
+    fi
+    systemctl daemon-reload 2>/dev/null
+fi
+
+# 5) 清数据目录
+rm -rf "$VAR"
+echo "[onekey-overclock uninstalled]"
+exit 0

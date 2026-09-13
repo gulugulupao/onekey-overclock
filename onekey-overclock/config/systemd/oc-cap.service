@@ -1,0 +1,11 @@
+[Unit]
+Description=OneKey-OC re-apply selected freq cap at boot
+After=local-fs.target
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/oc/oc-cap.sh
+
+[Install]
+WantedBy=multi-user.target

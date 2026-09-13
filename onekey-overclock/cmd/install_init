@@ -1,0 +1,6 @@
+#!/bin/bash
+# 安装初始化：确保数据目录就绪、清理可能的残留 PID。
+VAR="${TRIM_PKGVAR:-/vol1/@appdata/onekey-overclock}"
+mkdir -p "$VAR" "$VAR/log" "$VAR/run" "$VAR/settings" "$VAR/burn" "$VAR/selfheal" "$VAR/backup"
+rm -f "$VAR/run/web.pid" 2>/dev/null
+exit 0

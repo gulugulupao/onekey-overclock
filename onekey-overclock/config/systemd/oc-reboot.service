@@ -1,0 +1,10 @@
+[Unit]
+Description=OneKey-OC deferred clean reboot (load reverted DTB)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/oc/oc-reboot.sh
+
+[Install]
+WantedBy=multi-user.target

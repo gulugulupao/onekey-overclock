@@ -1,0 +1,27 @@
+# 构建产物与安装包不入库
+*.fpk
+*.tgz
+*.gz
+dist/
+build/
+
+# 第三方运行时（aarch64 node）
+onekey-overclock/app/runtime/
+
+# Python / 本地临时
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# 本地预览/说明页（不入库）
+*_预览_*.html
+
+# 内部实验记录与方案文档（不公开）
+大核空载频率_AB对比.md
+一键超频_精简方案_v2.md
+
+# OS
+.DS_Store
+Thumbs.db

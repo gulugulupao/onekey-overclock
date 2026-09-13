@@ -1,0 +1,79 @@
+#!/bin/bash
+# 一键超频 · onekey-overclock —— 原生生命周期（start / stop / status）
+# 精简版 v1.1.0：复用宿主 python3，不依赖 Docker / ClamSentinel / 任何第三方应用。
+set +e
+
+APP="${TRIM_APPDEST:-/vol1/@appcenter/onekey-overclock}"
+VAR="${TRIM_PKGVAR:-/vol1/@appdata/onekey-overclock}"
+# v1.1.0 精简版：复用宿主 python3，不再捆绑 node 运行时
+PY="${OC_PYTHON:-/usr/bin/python3}"
+WEB="$APP/web/server.py"
+
+LOG="$VAR/log"
+RUN="$VAR/run"
+WEBPID="$RUN/web.pid"
+HTTP_PORT="${SERVICE_PORT:-8090}"
+
+log(){ echo "[onekey-overclock][$(date '+%F %T')] $*"; }
+
+prepare () {
+    mkdir -p "$VAR" "$LOG" "$RUN" "$VAR/settings" "$VAR/burn" "$VAR/selfheal" "$VAR/backup"
+    chmod -R a+rwx "$RUN" 2>/dev/null
+    [ ! -f "$VAR/settings/settings.json" ] && echo '{"mode":"gentle","wd_enabled":false}' > "$VAR/settings/settings.json"
+}
+
+wait_tcp () {
+    local port="$1" tries="$2" i=0
+    while [ $i -lt "$tries" ]; do
+        if (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null; then exec 3>&- 3<&- 2>/dev/null; return 0; fi
+        sleep 1; i=$((i+1))
+    done
+    return 1
+}
+
+do_start () {
+    log "启动 (APP=$APP)"
+    prepare
+    # 幂等：已在运行则直接返回
+    if [ -f "$WEBPID" ] && kill -0 "$(cat "$WEBPID" 2>/dev/null)" 2>/dev/null; then
+        log "web 已在运行 PID=$(cat $WEBPID)，跳过"
+        if wait_tcp "$HTTP_PORT" 2; then log "端口 $HTTP_PORT 已就绪"; fi
+        return 0
+    fi
+    rm -f "$WEBPID"
+    nohup env \
+        APP_DIR="$APP" \
+        VAR="$VAR" \
+        SERVICE_PORT="$HTTP_PORT" \
+        "$PY" "$WEB" </dev/null >>"$LOG/app.log" 2>&1 &
+    echo $! > "$WEBPID"
+    if wait_tcp "$HTTP_PORT" 8; then
+        log "一键超频 web 已就绪 PID=$(cat $WEBPID) :$HTTP_PORT"
+    else
+        log "web 启动中 PID=$(cat $WEBPID)（可能仍在等待端口）"
+    fi
+    return 0
+}
+
+do_stop () {
+    log "停止"
+    [ -f "$WEBPID" ] && kill "$(cat "$WEBPID")" 2>/dev/null
+    pkill -f "$APP/web/server.py" 2>/dev/null
+    rm -f "$WEBPID"
+    log "已停止"
+    return 0
+}
+
+is_running () {
+    [ -f "$WEBPID" ] && kill -0 "$(cat "$WEBPID")" 2>/dev/null
+}
+
+case "$1" in
+start)   do_start ;;
+stop)    do_stop ;;
+status)  is_running && exit 0 || exit 3 ;;
+*)
+    echo "usage: $0 {start|stop|status}" >&2
+    exit 1
+    ;;
+esac

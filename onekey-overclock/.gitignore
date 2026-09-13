@@ -1,0 +1,16 @@
+# 顶层产物与打包中间物不入库
+*.fpk
+*.tgz
+*.gz
+
+# aarch64 node 二进制运行时（第三方、体积 ≈91MB，不上传 GitHub）
+app/runtime/
+
+# Python / 本地临时
+__pycache__/
+*.pyc
+sync_github_src.py
+
+# OS
+.DS_Store
+Thumbs.db

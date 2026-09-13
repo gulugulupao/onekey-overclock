@@ -1,0 +1,29 @@
+#!/bin/bash
+# 升级回调：刷新根分区自愈/上限脚本 + 重写三个 systemd 单元（从打包模板），保证升级后即最新、无需卸载重装。
+APP="${TRIM_APPDEST:-/vol1/@appcenter/onekey-overclock}"
+VAR="${TRIM_PKGVAR:-/vol1/@appdata/onekey-overclock}"
+OCDIR=/usr/local/sbin/oc
+chmod +x "$APP/app/bin/"*.sh 2>/dev/null || chmod +x "$APP/bin/"*.sh 2>/dev/null
+
+# 1) 刷新脚本到根分区启动目录 + 数据目录备份（含 oc-reset.sh，保证离线重置可用）
+mkdir -p "$OCDIR" "$VAR/selfheal" 2>/dev/null
+SRC="$APP/app/bin"; [ -d "$SRC" ] || SRC="$APP/bin"
+for s in oc-health.sh oc-reboot.sh oc-apply.sh oc-wd.sh oc-cap.sh oc-reset.sh; do
+    if [ -f "$SRC/$s" ]; then
+        cp -f "$SRC/$s" "$OCDIR/$s" 2>/dev/null
+        cp -f "$SRC/$s" "$VAR/selfheal/$s" 2>/dev/null
+        chmod +x "$OCDIR/$s" "$VAR/selfheal/$s" 2>/dev/null
+    fi
+done
+
+# 2) 重写三个 systemd 单元（从打包模板拷贝，升级后单元即最新）
+SD="$APP/config/systemd"
+for u in oc-health oc-reboot oc-cap; do
+    if [ -f "$SD/$u.service" ]; then
+        cp -f "$SD/$u.service" "/etc/systemd/system/$u.service"
+    fi
+done
+systemctl daemon-reload 2>/dev/null
+systemctl enable oc-health.service oc-reboot.service oc-cap.service 2>/dev/null
+echo "[oc scripts + systemd units refreshed on upgrade]"
+exit 0

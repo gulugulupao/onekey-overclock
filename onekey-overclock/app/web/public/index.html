@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>一键超频 · 性能控制台</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="lgHx" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#22d3ee"/>
+            <stop offset="1" stop-color="#6366f1"/>
+          </linearGradient>
+          <linearGradient id="lgBolt" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7df9ff"/>
+            <stop offset="1" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 3 56 19v26L32 61 8 45V19z" fill="none" stroke="url(#lgHx)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M20 18h9L24 28l-4 0z" fill="url(#lgBolt)" opacity=".35"/>
+        <path d="M35 14h10L36 33h9L31 50h-1l6-12h-9l11-18h-1l2-6z" fill="url(#lgBolt)"/>
+        <path d="M35.5 13.2h7.6L35 33.6h6.5L31 49.7l3.5-6.6h-8l10.4-16.6h-6.6L38.3 7l-2.8 6.2z" fill="#0cf" opacity=".15"/>
+        <circle cx="32" cy="32" r="27.5" fill="none" stroke="url(#lgHx)" stroke-width=".8" opacity=".4"/>
+      </svg>
+      <div class="tit">
+        <h1>一键<span class="accent">超频</span></h1>
+        <span class="sub">ARM A73 大核 · 三档实时性能控制台</span>
+      </div>
+    </div>
+    <div class="top-right">
+      <span class="live" id="live" title="后端连接状态"><i></i><span id="liveText">连接中…</span></span>
+      <div class="badges" id="badges"></div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- 实时仪表 -->
+    <div class="panel hero">
+      <div class="gauge-wrap">
+        <svg id="gauge" viewBox="0 0 320 340" role="img" aria-label="实时大核频率仪表">
+          <defs>
+            <linearGradient id="gArc" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#22d3ee"/>
+              <stop offset=".5" stop-color="#38bdf8"/>
+              <stop offset="1" stop-color="#818cf8"/>
+            </linearGradient>
+          </defs>
+          <!-- 底环轨道（整圆） -->
+          <circle cx="160" cy="180" r="130" fill="none" stroke="#151d2a" stroke-width="16"/>
+          <!-- 渐变能量弧（270°，自左下经顶至右下） -->
+          <path id="gFill" d="M68.1 271.9 A130 130 0 1 1 251.9 271.9" pathLength="100" fill="none" stroke="url(#gArc)" stroke-width="16" stroke-linecap="round" style="transition: stroke-dasharray .6s cubic-bezier(.22,1,.36,1); stroke-dasharray: 0 100; filter: drop-shadow(0 0 10px rgba(56,189,248,.55));"/>
+          <!-- 发光末端光点（随频率移动） -->
+          <circle id="gTip" cx="160" cy="310" r="7" fill="#d8f7ff" style="filter: drop-shadow(0 0 8px #7df9ff);"/>
+          <!-- 频率刻度光点 1.0 · 1.5 · 2.0 · 2.5 GHz -->
+          <g class="g-dots">
+            <circle cx="61" cy="279" r="3.5" fill="#5b7fb8"/>
+            <circle cx="61" cy="81" r="3.5" fill="#5b7fb8"/>
+            <circle cx="259" cy="81" r="3.5" fill="#5b7fb8"/>
+            <circle cx="259" cy="279" r="3.5" fill="#5b7fb8"/>
+          </g>
+          <g class="g-nums">
+            <text x="61" y="303" text-anchor="middle" class="g-num">1.0</text>
+            <text x="61" y="71" text-anchor="middle" class="g-num">1.5</text>
+            <text x="259" y="71" text-anchor="middle" class="g-num">2.0</text>
+            <text x="259" y="303" text-anchor="middle" class="g-num">2.5</text>
+          </g>
+          <!-- 中央读数 -->
+          <text id="gFreq" x="160" y="150" text-anchor="middle" class="g-freqtext">—</text>
+          <text x="160" y="180" text-anchor="middle" class="g-unittext">GHz</text>
+          <text id="gTemp" x="160" y="262" text-anchor="middle" class="g-temptext">温度 — °C</text>
+        </svg>
+      </div>
+      <div class="readout-cols" id="readouts"></div>
+    </div>
+
+    <!-- 档位切换 -->
+    <div class="panel">
+      <h3><span class="dot"></span>性能模式 · 三档切换</h3>
+      <div class="modes" id="modes" role="radiogroup" aria-label="性能模式档位"></div>
+      <div id="modeHint" class="mode-hint ok"><span class="ic">⚡</span><span>读取状态中…</span></div>
+      <div class="controls">
+        <button class="btn" id="wdToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>看门狗状态读取中…</span>
+        </button>
+        <button class="btn solid" id="applyBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>应用所选档位</span>
+        </button>
+        <button class="btn amber" id="rebootBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          <span>立即重启生效</span>
+        </button>
+        <button class="btn red" id="resetBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h3l3-3 3 3h3"/><path d="M3 6v5a4 4 0 0 0 4 4h10"/></svg>
+          <span>恢复出厂</span>
+        </button>
+      </div>
+      <p class="hint">
+        只要内核已加载超频档位，三个档位之间切换即<b>实时生效、无需重启</b>；
+        仅<b>首次</b>从默认进入野兽/狂暴档需<b>重启一次</b>换 DTB。「乖巧」始终为出厂频率、即时生效。
+        任意未授权重启 / 宕机 / 断电后再开机，将自动回落默认频率，杜绝变砖。
+        <span class="dim">（硬件看门狗为可选保险，非强制）</span>
+      </p>
+      <p class="hint warn-hint">
+        <b>供电注意（12V/3A=36W 电源预算）：</b>若插满 <b>3 块机械硬盘</b>且同时高速读写，总功耗会逼近甚至超出 36W 上限，导致 12V 跌压、<b>CPU 掉压不稳</b>——此类场景建议<b>降至「野兽」档</b>或改用 SSD。<b>RAID 0 / 1 / 5 组阵列</b>会令多盘同时满负荷，同样加速抢电，请将其视为"满载机械盘 + 高频档"风险叠加。
+      </p>
+      <p class="hint heat-hint">
+        <span class="ic">🌡️</span><b>散热提醒（温度优先）：</b>频率拉高后 CPU 发热会明显上升。「狂暴」档<b>满载长时间运行</b>时，若机箱被动散热 / 通风不畅 / 积灰，核心温度可能逼近 <b>85°C 温度墙</b>并触发自动降频保护，长期高温也会加速老化。请务必确保<b>良好风道与主动散热</b>后再使用高频档，并在烧机时观察温度曲线。
+      </p>
+    </div>
+
+    <!-- 烧机 -->
+    <div class="panel">
+      <h3><span class="dot"></span>满载烧机验证</h3>
+      <div class="controls">
+        <button class="btn green" id="burnStart">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          <span>开始烧机</span>
+        </button>
+        <button class="btn red" id="burnStop">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+          <span>停止烧机</span>
+        </button>
+        <span class="badge" id="burnInfo" style="align-self:center">未运行</span>
+      </div>
+      <div class="legend"><span><i class="lf"></i>频率 (MHz)</span><span><i class="lt"></i>温度 (°C)</span><span><i class="lwall"></i>85°C 温度墙</span></div>
+      <canvas id="curve"></canvas>
+    </div>
+
+    <!-- 日志 -->
+    <div class="panel logpanel">
+      <h3><span class="dot"></span>运行日志</h3>
+      <div class="log-flex">
+        <div class="log-content"><div id="log"></div></div>
+        <div class="log-side">
+          <button class="btn solid icon-only" id="exportLogBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>导出日志（近7天）</span>
+          </button>
+          <p class="author">作者：<b>很多问题的小明同学</b></p>
+          <p class="gh-link"><a href="https://github.com/gulugulupao/onekey-overclock" target="_blank" rel="noopener">点击跳转到 GitHub 项目主页 ↗</a></p>
+          <p class="ver">App 版本 <b id="ver">—</b></p>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  <!-- 实验记录弹窗：双击「App 版本」→ 确认后显示 -->
+  <div class="modal-overlay" id="labOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="labTitle">
+      <button class="modal-close" id="labClose" type="button" aria-label="关闭">&times;</button>
+      <h3 class="modal-title" id="labTitle"><span class="dot"></span>实验档案 · 2.7GHz 探测</h3>
+      <div class="exp-list" id="expList"></div>
+      <p class="hint dim modal-note"><b>本模块仅作记录备注</b>，用于记住「一键超频」之外的实验性超频结论，<b>不含任何超频执行入口</b>，无法经由本应用触发 2.7GHz；如需复现请在系统层面自行评估。</p>
+    </div>
+  </div>
+
+  <!-- 确认对话框 -->
+  <div class="modal-overlay" id="confirmOverlay" hidden>
+    <div class="modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <button class="modal-close" id="confirmClose" type="button" aria-label="关闭">&times;</button>
+      <h3 class="modal-title" id="confirmTitle"><span class="dot"></span>确认查看实验记录</h3>
+      <p class="confirm-text">即将查看「实验档案 · 2.7GHz 探测」，该数据<b>仅作记录备注、不含任何超频执行入口</b>。确定查看？</p>
+      <div class="confirm-actions">
+        <button class="btn" id="confirmCancel" type="button">取消</button>
+        <button class="btn solid" id="confirmOk" type="button">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 公众号二维码 · 放大到可扫码 -->
+  <div class="wx-big">
+    <p class="wx-big-title">🌐 扫码关注作者公众号「很多问题的小明同学」</p>
+    <img class="wxqr-big" src="wx_qr.png" alt="微信公众号：很多问题的小明同学">
+    <p class="wx-big-tip">用手机微信「扫一扫」即可关注</p>
+  </div>
+
+  <footer>自愈回滚 · 谨慎操作超频档 · 注意散热 · 硬件看门狗可选</footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>

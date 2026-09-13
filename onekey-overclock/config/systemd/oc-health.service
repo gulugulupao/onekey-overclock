@@ -1,0 +1,13 @@
+[Unit]
+Description=OneKey-OC self-heal (atomic revert freq after un-armed reboot)
+DefaultDependencies=no
+Before=sysinit.target
+After=local-fs.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/oc/oc-health.sh
+
+[Install]
+WantedBy=sysinit.target

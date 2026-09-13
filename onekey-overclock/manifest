@@ -1,0 +1,15 @@
+appname               = onekey-overclock
+version               = 1.0.0
+display_name          = 一键超频
+desc                  = 一键超频 —— A73 大核三档频率管理器，快速安全地压榨性能。<br><br>1.三档一键切换：<b>乖巧</b>(2.2GHz) · <b>野兽</b>(2.4GHz) · <b>狂暴</b>(2.5GHz)，加载后三档<b>实时切换、无需反复重启</b>，并实时读取频率 / 电压 / 温度。<br>2.烧机 + 曲线：内置大核满载烧机，实时温度 / 频率曲线验证稳定性与降频。<br>3.自愈回滚：任意未授权重启 / 宕机 / 断电后再开机自动回到默认频率，杜绝变砖。<br>4.一键恢复：随时回滚至出厂频率。硬件看门狗为可选"保险"。<br><br><b>⚠ 供电提醒（12V/3A≈36W 电源）：</b>插满 <b>3 块机械盘</b>且同时高速读写，或组 <b>RAID 0/1/5</b> 阵列时，总功耗趋近/超 36W 上限易致 12V 跌压、CPU 掉压不稳——此类高功耗场景建议降至「野兽」档或改用 SSD。
+source                = thirdparty
+platform              = arm
+maintainer            = 很多问题的小明同学
+distributor           = 很多问题的小明同学
+os_min_version        = 0.9.25
+desktop_uidir         = ui
+desktop_applaunchname = onekey-overclock.Application
+service_port          = 8090
+checkport             = true
+ctl_stop              = true
+changelog             = v1.0.0 正式版：A73 大核<b>三档一键超频</b>（乖巧 2.2G / 野兽 2.4G / 狂暴 2.5G），加载后<b>实时切换、无需反复重启</b>；实时读取频率 / 电压 / 温度 / 策略；内置<b>自愈回滚</b>——任意未授权重启 / 宕机 / 断电后再开机自动回落默认频率，杜绝变砖；满载<b>烧机 + 实时温度/频率曲线</b>验证稳定性；可选<b>硬件看门狗</b>；一键恢复出厂；导出近 7 天诊断日志。提供两种安装包，功能一致：<b>node 运行时版</b>（约 51MB，自带 aarch64 node）与 <b>Python 精简版</b>（约 0.3MB，复用宿主 Python3）。

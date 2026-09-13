@@ -1,0 +1,84 @@
+#!/bin/bash
+# 安装完成回调：加持执行权限 + 安装「自愈回滚」v2 双服务。
+#   oc-health.service：启动早期【仅原子回滚】fnEnv（DefaultDependencies=no 保证进启动链）
+#   oc-reboot.service ：系统就绪后执行一次干净重启
+#   自愈脚本放根分区 /usr/local/sbin/oc/（第一步、最稳），并备份一份到数据目录。
+APP="${TRIM_APPDEST:-/vol1/@appcenter/onekey-overclock}"
+VAR="${TRIM_PKGVAR:-/vol1/@appdata/onekey-overclock}"
+OCDIR=/usr/local/sbin/oc
+
+# 1) 运行时与脚本执行权限
+chmod +x "$APP/cmd/main" "$APP/cmd/"*.sh 2>/dev/null
+chmod +x "$APP/app/bin/"*.sh 2>/dev/null || chmod +x "$APP/bin/"*.sh 2>/dev/null
+chmod -R a+rX "$APP/app/web" 2>/dev/null || chmod -R a+rX "$APP/web" 2>/dev/null
+
+# 2) 拷贝脚本到根分区启动目录 + 数据目录备份
+mkdir -p "$OCDIR" "$VAR/selfheal" "$VAR/log" "$VAR/run"
+SRC="$APP/app/bin"
+[ -d "$SRC" ] || SRC="$APP/bin"
+for s in oc-health.sh oc-reboot.sh oc-apply.sh oc-wd.sh oc-cap.sh; do
+    if [ -f "$SRC/$s" ]; then
+        cp -f "$SRC/$s" "$OCDIR/$s" 2>/dev/null
+        cp -f "$SRC/$s" "$VAR/selfheal/$s" 2>/dev/null
+        chmod +x "$OCDIR/$s" "$VAR/selfheal/$s" 2>/dev/null
+    fi
+done
+# 开机按所选档位重设频率上限（新装或无档位时落到最稳默认 gentle）
+echo "gentle" > "$OCDIR/oc-mode" 2>/dev/null; sync
+
+# 3) 注册 systemd 自愈/service 单元（优先从打包模板 config/systemd 拷贝，缺失则原地生成兜底）
+write_units () {
+    local SD="$APP/config/systemd"
+    if [ -d "$SD" ]; then
+        for u in oc-health oc-reboot oc-cap; do
+            if [ -f "$SD/$u.service" ]; then
+                cp -f "$SD/$u.service" "/etc/systemd/system/$u.service"
+            fi
+        done
+    else
+        cat > /etc/systemd/system/oc-health.service <<UNIT
+[Unit]
+Description=OneKey-OC self-heal (atomic revert freq after un-armed reboot)
+DefaultDependencies=no
+Before=sysinit.target
+After=local-fs.target
+Conflicts=shutdown.target
+[Service]
+Type=oneshot
+ExecStart=$OCDIR/oc-health.sh
+[Install]
+WantedBy=sysinit.target
+UNIT
+
+cat > /etc/systemd/system/oc-reboot.service <<UNIT
+[Unit]
+Description=OneKey-OC deferred clean reboot (load reverted DTB)
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=$OCDIR/oc-reboot.sh
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+cat > /etc/systemd/system/oc-cap.service <<UNIT
+[Unit]
+Description=OneKey-OC re-apply selected freq cap at boot
+After=local-fs.target
+Before=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=$OCDIR/oc-cap.sh
+[Install]
+WantedBy=multi-user.target
+UNIT
+    fi
+}
+write_units
+
+systemctl daemon-reload 2>/dev/null
+systemctl enable oc-health.service 2>/dev/null
+systemctl enable oc-reboot.service 2>/dev/null
+systemctl enable oc-cap.service 2>/dev/null
+echo "[oc-health + oc-reboot + oc-cap services installed]"
+exit 0
