@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一键超频 OneKey-OC · 飞牛 OS A73 大核三档超频管理器</title>
+<title>一键超频 OneKey-OC · 飞牛 OS A73 大核四档超频管理器</title>
 <style>
 /* ==== 深色科技调色板 · Custom:oc-cyan ==== */
 :root {
@@ -302,19 +302,19 @@ footer h3 { font-size: 15px; color: var(--page-text); }
       <div class="report-intro__content">
         <div class="intro-badges">
           <span class="pill pill--accent">⚡ 一键超频</span>
-          <span class="pill pill--accent">v1.0.0 正式版</span>
+          <span class="pill pill--accent">v1.1.0 正式版</span>
           <span class="pill pill--ok">● 自愈回滚</span>
           <span class="pill pill--warn">ARM A73 大核</span>
         </div>
         <h1>一键超频 OneKey-OC<em class="en">fnOS · A73 Big-Core Frequency Manager</em></h1>
         <p class="report-intro__summary">
-          在飞牛 OS（Amlogic A311D）上，用<b>三档一键切换</b>安全地管理大核频率，加载后
-          <b>实时生效、无需反复重启</b>，并内置自愈回滚兜底。三档覆盖从最稳出厂到满载峰值，
+          在飞牛 OS（Amlogic A311D）上，用<b>四档一键切换</b>安全地管理大核频率，加载后
+          <b>实时生效、无需反复重启</b>，并内置自愈回滚兜底。四档覆盖从最稳出厂到极限高频，
           一套简单可靠的控制台，把性能拿捏在你自己手里。
         </p>
         <div class="hero-metrics">
-          <div class="hero-metric"><span class="hv">3 档</span><span class="hk">实时切换 · Presets</span></div>
-          <div class="hero-metric"><span class="hv">2.5 GHz</span><span class="hk">狂暴峰值 · Peak</span></div>
+          <div class="hero-metric"><span class="hv">4 档</span><span class="hk">实时切换 · Presets</span></div>
+          <div class="hero-metric"><span class="hv">2.64 GHz</span><span class="hk">焚天极限 · Peak</span></div>
           <div class="hero-metric"><span class="hv">85 °C</span><span class="hk">温度墙守护 · Guardrail</span></div>
         </div>
         <div class="hero-actions">
@@ -333,7 +333,7 @@ footer h3 { font-size: 15px; color: var(--page-text); }
         <p class="sec-en">Overview</p>
         <h2>产品简介</h2>
         <p class="lead">
-          这是一款面向飞牛 OS（Amlogic A311D 平台）的大核频率管理工具。它把超频收敛成清晰的三档，
+          这是一款面向飞牛 OS（Amlogic A311D 平台）的大核频率管理工具。它把超频收敛成清晰的四档，
           一键切换、实时落地，而不是让用户在命令行里手工折腾 DTB 和 udev 规则。
           无论你想“稳稳出厂”还是“压榨峰值”，都在同一个控制台里完成。
         </p>
@@ -342,9 +342,9 @@ footer h3 { font-size: 15px; color: var(--page-text); }
       <section id="features">
         <p class="sec-en">Features</p>
         <h2>核心功能</h2>
-        <p class="lead">三个档位 + 一套安全兜底，覆盖管理、验证与恢复的全部需求。</p>
+        <p class="lead">四个档位 + 一套安全兜底，覆盖管理、验证与恢复的全部需求。</p>
         <div class="feature-grid">
-          <div class="feature"><span class="ico">🎚️</span><h4>三档一键切换</h4><p>现货三档：乖巧（出厂）、野兽（加速）、狂暴（峰值）。加载后切换<b>实时生效、无需反复重启</b>。</p></div>
+          <div class="feature"><span class="ico">🎚️</span><h4>四档一键切换</h4><p>现货四档：乖巧（出厂）、野兽（加速）、狂暴（峰值）、焚天（极限高频）。加载后切换<b>实时生效、无需反复重启</b>。</p></div>
           <div class="feature"><span class="ico">📊</span><h4>实时读数</h4><p>当前 / 最大可调频率、电压、CPU 温度、调度策略，一目了然。</p></div>
           <div class="feature"><span class="ico">🧠</span><h4>动态生成 DTB</h4><p>用 <code>dtc</code> + <code>fdtoverlay</code> 合并超频 OPP，原子写入，安全可靠。</p></div>
           <div class="feature"><span class="ico">🛡️</span><h4>自愈回滚</h4><p>任意未授权重启 / 宕机 / 断电后再开机，自动回落默认频率，是最重要的一道安全网。</p></div>
@@ -357,7 +357,7 @@ footer h3 { font-size: 15px; color: var(--page-text); }
 
       <section>
         <p class="sec-en">Presets</p>
-        <h2>三个档位</h2>
+        <h2>四个档位</h2>
         <p class="lead">从最稳到最激进，一次选择，实时切换。</p>
         <div class="table-wrap">
           <table>
@@ -369,13 +369,14 @@ footer h3 { font-size: 15px; color: var(--page-text); }
               <tr><th scope="row">乖巧</th><td>2.2 GHz</td><td>出厂默认</td><td>最稳 · 零改动 · 出厂一致</td></tr>
               <tr><th scope="row">野兽</th><td>2.4 GHz</td><td>约 1.03V</td><td>强力加速 · 日常推荐</td></tr>
               <tr><th scope="row">狂暴</th><td>2.5 GHz</td><td>约 1.04V</td><td>满载峰值 · 高性能场景</td></tr>
+              <tr><th scope="row">焚天</th><td>2.64 GHz</td><td>约 1.04V</td><td>极限高频 · 需改装散热机箱</td></tr>
             </tbody>
           </table>
         </div>
 
         <div class="gauge-box">
           <div class="gauge-inner">
-            <svg class="freq-gauge" viewBox="0 0 240 212" role="img" aria-label="三档频率圆环示意：乖巧 2.2GHz、野兽 2.4GHz、狂暴 2.5GHz">
+            <svg class="freq-gauge" viewBox="0 0 240 212" role="img" aria-label="四档频率圆环示意：乖巧 2.2GHz、野兽 2.4GHz、狂暴 2.5GHz、焚天 2.64GHz">
               <defs>
                 <linearGradient id="gg" x1="0" y1="1" x2="1" y2="0">
                   <stop offset="0%" stop-color="#5eead4"/>
@@ -395,23 +396,26 @@ footer h3 { font-size: 15px; color: var(--page-text); }
                   <mpath href="#ga"/>
                 </animateMotion>
               </circle>
-              <circle class="tick" cx="46" cy="106" r="5" fill="#34d399"/>
-              <circle class="tick" cx="120" cy="32" r="5" fill="#38bdf8"/>
-              <circle class="tick" cx="194" cy="106" r="5" fill="#818cf8"/>
-              <text class="tick-label" x="8" y="110">乖巧</text>
-              <text class="tick-freq" x="8" y="124">2.2 GHz</text>
-              <text class="tick-label" x="120" y="20" text-anchor="middle">野兽</text>
-              <text class="tick-freq" x="120" y="32" text-anchor="middle">2.4 GHz</text>
-              <text class="tick-label" x="232" y="110" text-anchor="end">狂暴</text>
-              <text class="tick-freq" x="232" y="124" text-anchor="end">2.5 GHz</text>
+              <circle class="tick" cx="24" cy="140" r="5" fill="#34d399"/>
+              <circle class="tick" cx="84" cy="52" r="5" fill="#38bdf8"/>
+              <circle class="tick" cx="156" cy="52" r="5" fill="#818cf8"/>
+              <circle class="tick" cx="216" cy="140" r="5" fill="#fb7185"/>
+              <text class="tick-label" x="8" y="158">乖巧</text>
+              <text class="tick-freq" x="8" y="172">2.2 GHz</text>
+              <text class="tick-label" x="58" y="40" text-anchor="middle">野兽</text>
+              <text class="tick-freq" x="58" y="52" text-anchor="middle">2.4 GHz</text>
+              <text class="tick-label" x="182" y="40" text-anchor="middle">狂暴</text>
+              <text class="tick-freq" x="182" y="52" text-anchor="middle">2.5 GHz</text>
+              <text class="tick-label" x="232" y="140" text-anchor="end">焚天</text>
+              <text class="tick-freq" x="232" y="154" text-anchor="end">2.64 GHz</text>
             </svg>
             <div class="gauge-readout">
-              <span class="gr-val">2.5</span>
+              <span class="gr-val">2.64</span>
               <span class="gr-unit">GHz</span>
-              <span class="gr-name"><b>狂暴</b> · 满载峰值</span>
+              <span class="gr-name"><b>焚天</b> · 极限高频</span>
             </div>
           </div>
-          <p class="g-cap">🎈 动态圆环示意 · 光点巡游三档位置（渲染处即对应档位）</p>
+          <p class="g-cap">🎈 动态圆环示意 · 光点巡游四档位置（渲染处即对应档位）</p>
         </div>
       </section>
 
@@ -479,14 +483,15 @@ footer h3 { font-size: 15px; color: var(--page-text); }
           <ul>
             <li><b>先看温度，再定档位</b>：烧机验证时多留意温度曲线，别只盯着频率数字好看。</li>
             <li><b>狂暴档务必要有良好的主动散热</b>：至少保证风道与风扇正常，让高负载时的温度稳在合理区间。</li>
+            <li><b>「焚天」档仅限改装机箱</b>：2.64 GHz 为极限高频，发热极高，<b>必须</b>配合自改机箱 + 独立 CPU 散热风扇使用；原装被动散热盒子请勿选择该档。</li>
             <li><b>放心，保护在兜底</b>：即便散热不足触发降频，也只会回落到更安全的频率，不会损坏设备。</li>
           </ul>
         </div>
 
         <div class="heat-chart">
-          <p class="hc-title">🌡️ 三档满载温度示意（视散热条件而异）</p>
+          <p class="hc-title">🌡️ 四档满载温度示意（视散热条件而异）</p>
           <p class="hc-sub">越向右发热越明显 · 高频请配上好散热才稳妥</p>
-          <svg class="heat-svg" viewBox="0 0 720 300" role="img" aria-label="三档满载温度示意柱状图与85°C温度墙">
+          <svg class="heat-svg" viewBox="0 0 720 300" role="img" aria-label="四档满载温度示意柱状图与85°C温度墙">
             <!-- 网格线 + 温度刻度 -->
             <g>
               <line x1="60" y1="40" x2="640" y2="40" stroke="rgba(142,163,192,0.10)" stroke-width="1"/>
@@ -503,38 +508,47 @@ footer h3 { font-size: 15px; color: var(--page-text); }
             <!-- 85°C 温度墙 -->
             <line x1="60" y1="80" x2="640" y2="80" stroke="#fb7185" stroke-dasharray="6 5" stroke-width="2" opacity=".9"/>
             <text class="g-wallL" x="652" y="74" text-anchor="end">▲ 85°C 温度墙</text>
+            <!-- 焚天 · 极限高频，仅限改散热机箱 -->
+            <g class="barwrap">
+              <title>焚天 · 约 84°C\n极限高频逼近温度墙，必须改装机箱加主动散热</title>
+              <rect class="hb" x="569" y="85" width="66" height="167" rx="7" fill="url(#heatBlaze)" style="transition-delay:.34s"/>
+              <text class="b-val" x="602" y="74" text-anchor="middle" fill="#fb923c">≈84°C</text>
+              <text class="b-lab" x="602" y="272" text-anchor="middle" fill="#fb923c">焚天 · 需改散热</text>
+            </g>
             <!-- 狂暴 · 需强散热 -->
             <g class="barwrap">
               <title>狂暴 · 约 80°C\n满载发热很高，必须主动强散热</title>
-              <rect class="hb" x="484" y="93" width="72" height="159" rx="7" fill="url(#heatDanger)" style="transition-delay:.28s"/>
-              <text class="b-val" x="520" y="82" text-anchor="middle" fill="#fb7185">≈80°C</text>
-              <text class="b-lab" x="520" y="272" text-anchor="middle" fill="#fb7185">狂暴 · 需强散热</text>
+              <rect class="hb" x="425" y="93" width="66" height="159" rx="7" fill="url(#heatDanger)" style="transition-delay:.28s"/>
+              <text class="b-val" x="458" y="82" text-anchor="middle" fill="#fb7185">≈80°C</text>
+              <text class="b-lab" x="458" y="272" text-anchor="middle" fill="#fb7185">狂暴 · 需强散热</text>
             </g>
             <!-- 野兽 · 明显发热 -->
             <g class="barwrap">
               <title>野兽 · 约 66°C\n满载发热明显，建议良好散热</title>
-              <rect class="hb" x="319" y="130" width="72" height="122" rx="7" fill="url(#heatMid)" style="transition-delay:.18s"/>
-              <text class="b-val" x="355" y="120" text-anchor="middle" fill="#38bdf8">≈66°C</text>
-              <text class="b-lab" x="355" y="272" text-anchor="middle" fill="#38bdf8">野兽 · 明显发热</text>
+              <rect class="hb" x="281" y="130" width="66" height="122" rx="7" fill="url(#heatMid)" style="transition-delay:.18s"/>
+              <text class="b-val" x="314" y="120" text-anchor="middle" fill="#38bdf8">≈66°C</text>
+              <text class="b-lab" x="314" y="272" text-anchor="middle" fill="#38bdf8">野兽 · 明显发热</text>
             </g>
             <!-- 乖巧 · 出厂 -->
             <g class="barwrap">
               <title>乖巧 · 约 50°C\n满载发热温和，与出厂基本一致</title>
-              <rect class="hb" x="154" y="173" width="72" height="79" rx="7" fill="url(#heatCool)" style="transition-delay:.08s"/>
-              <text class="b-val" x="190" y="163" text-anchor="middle" fill="#34d399">≈50°C</text>
-              <text class="b-lab" x="190" y="272" text-anchor="middle" fill="#34d399">乖巧 · 装载出厂</text>
+              <rect class="hb" x="137" y="173" width="66" height="79" rx="7" fill="url(#heatCool)" style="transition-delay:.08s"/>
+              <text class="b-val" x="170" y="163" text-anchor="middle" fill="#34d399">≈50°C</text>
+              <text class="b-lab" x="170" y="272" text-anchor="middle" fill="#34d399">乖巧 · 装载出厂</text>
             </g>
             <!-- 渐变定义 -->
             <defs>
               <linearGradient id="heatCool" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#34d399"/></linearGradient>
               <linearGradient id="heatMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#67e8f9"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
               <linearGradient id="heatDanger" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb923c"/><stop offset="1" stop-color="#fb7185"/></linearGradient>
+              <linearGradient id="heatBlaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a4d"/><stop offset="1" stop-color="#ef4444"/></linearGradient>
             </defs>
           </svg>
           <div class="heat-leg">
             <i><b style="background:#34d399"></b>乖巧 · 发热温和</i>
             <i><b style="background:#38bdf8"></b>野兽 · 明显发热</i>
             <i><b style="background:#fb7185"></b>狂暴 · 需强散热</i>
+            <i><b style="background:#ef4444"></b>焚天 · 改装机箱专用</i>
             <i style="color:var(--page-text-muted)">数值为满载参考温度，实际随散热条件浮动</i>
           </div>
         </div>
@@ -546,16 +560,42 @@ footer h3 { font-size: 15px; color: var(--page-text); }
         <p class="lead">在飞牛 OS 应用中心“上传应用包”中选择任一 fpk 安装即可。两个包功能一致，按偏好二选一。</p>
         <div class="download">
           <div class="dl-card">
-            <div class="fn">OneKey-OC-v1.0.0-node.fpk</div>
-            <div class="size">约 51 MB · Node 运行时版</div>
+            <div class="fn">OneKey-OC-v1.1.0-node.fpk</div>
+            <div class="size">约 49 MB · Node 运行时版</div>
             <p>自带 aarch64 node，环境依赖最少，兼容性最可控。</p>
-            <a class="btn btn--primary" href="https://github.com/gulugulupao/onekey-overclock/releases/download/v1.0.0/OneKey-OC-v1.0.0-node.fpk">⬇ 下载 Node 版</a>
+            <a class="btn btn--primary" href="https://github.com/gulugulupao/onekey-overclock/releases/download/v1.1.0/OneKey-OC-v1.1.0-node.fpk">⬇ 下载 Node 版</a>
           </div>
           <div class="dl-card">
-            <div class="fn">OneKey-OC-v1.0.0-lite.fpk</div>
+            <div class="fn">OneKey-OC-v1.1.0-lite.fpk</div>
             <div class="size">约 0.3 MB · Python 精简版（推荐）</div>
             <p>复用宿主 Python3，轻量干净，无捆绑运行时。</p>
-            <a class="btn" href="https://github.com/gulugulupao/onekey-overclock/releases/download/v1.0.0/OneKey-OC-v1.0.0-lite.fpk">⬇ 下载精简版</a>
+            <a class="btn" href="https://github.com/gulugulupao/onekey-overclock/releases/download/v1.1.0/OneKey-OC-v1.1.0-lite.fpk">⬇ 下载精简版</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="changelog">
+        <p class="sec-en">Changelog</p>
+        <h2>版本历史</h2>
+        <p class="lead">保留历次发布记录，便于回溯。除当前正式版外，过往版本不再提供下载。</p>
+
+        <div class="compare">
+          <div class="compare-card" style="border-color:rgba(56,189,248,0.45)">
+            <h4>🟢 v1.1.0（当前正式版）<span class="tag tag--light">可下载</span></h4>
+            <ul>
+              <li><span class="dot">▸</span><span><b>新增「焚天」档</b>：A73 大核极限高频 <b>2.64 GHz</b>，电压约 1.04V，峰值性能更进一步。</span></li>
+              <li><span class="dot">▸</span><span><b>专属高温风格界面</b>：焚天档独立火焰主题，并内置散热自检提示，提醒仅在<b>改装散热机箱</b>下使用。</span></li>
+              <li><span class="dot">▸</span><span><b>烧机曲线重构</b>：完整坐标轴 / 刻度 / 网格与单位标注，温度 · 频率数据更直观、更易读。</span></li>
+              <li><span class="dot">▸</span><span><b>重启加载优化</b>：切换需加载新 DTB 的档位时，自动判断并在适当时机提示重启生效，流程更顺滑。</span></li>
+            </ul>
+          </div>
+          <div class="compare-card" style="opacity:.75">
+            <h4>🟡 v1.0.0（已存档）<span class="tag tag--warn">暂不可下载</span></h4>
+            <ul>
+              <li><span class="dot">▸</span><span>首个正式版，三档（乖巧 / 野兽 / 狂暴）一键切换。</span></li>
+              <li><span class="dot">▸</span><span>自愈回滚 + 硬件看门狗（可选）安全兜底。</span></li>
+              <li><span class="dot">▸</span><span>动态生成 DTB、满载烧机曲线、近 7 天日志导出。</span></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -609,7 +649,7 @@ footer h3 { font-size: 15px; color: var(--page-text); }
           <p style="color:var(--page-text-muted)">微信搜一搜「很多问题的小明同学」</p>
         </div>
       </div>
-      <p style="margin-top:var(--space-4);font-size:13px">© 2026 很多问题的小明同学 · OneKey-OC (一键超频) v1.0.0</p>
+      <p style="margin-top:var(--space-4);font-size:13px">© 2026 很多问题的小明同学 · OneKey-OC (一键超频) v1.1.0</p>
     </footer>
   </div>
 </article>
